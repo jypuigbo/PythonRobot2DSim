@@ -53,10 +53,19 @@ class ExpSetupPreys(object):
         print "-------------------------------------------------"
         th = .2
         positions = [(-3, 2 + th), (3, 2 + th)]
+        L_wall=5.
+        W_wall=.1
+        area=L_wall/2.-W_wall
+        positions=[]
+        for rob in range(n):
+            positions .append([random.random()*2*area-area,random.random()*2*area-area])
         angles = [2 * np.pi, np.pi]
         self.epucks = [prey(position=positions[i], angle=angles[i], frontIR=0, nother=2, nrewsensors=4) for i in range(n)]
-        addWalls((0, 0), dx=3.75, dh=0.1, h=5, th=th)
-        addStandardWall((0,0),5,.1,'wall_1')
+        #addWalls((0, 0), dx=0, dh=0.1, h=10, th=th)
+        addStandardWall((-L_wall,0),L_wall,W_wall,'wall_W')
+        addStandardWall((L_wall,0),L_wall,W_wall,'wall_E')
+        addStandardWall((0,L_wall),W_wall,L_wall,'wall_N')
+        addStandardWall((0,-L_wall),W_wall,L_wall,'wall_S')
         self.objs = []
         addReward(self, pos=(0, 4 + th), vel=(0, 0), bDynamic=False, bCollideNoOne=True)
         addReward(self, pos=(0, 0 + th), vel=(0, 0), reward_type=1, bDynamic=False, bCollideNoOne=True)
