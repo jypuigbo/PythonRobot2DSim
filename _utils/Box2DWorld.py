@@ -369,10 +369,10 @@ def createRope(position, nparts=10, r=0.3, density=1, name=""):
     return rbodies, [jointList[0], jointList[-1]]
 
 
-def createBoxFixture(pos = (0,0), width=1.0, height=1.0, bDynamic=True, friction=0.3, density=1, collisionGroup=None, restitution=None):
+def createBoxFixture(pos = (0,0), width=1.0, height=1.0, bDynamic=True, friction=0.3, density=1, collisionGroup=None, restitution=None,angle=0):
     global world
     boxShape = Box2D.b2PolygonShape()
-    boxShape.SetAsBox(width, height, pos, 0)    # width, height, position (x,y), angle 
+    boxShape.SetAsBox(width, height, pos, angle)    # width, height, position (x,y), angle 
     fixtureDef = Box2D.b2FixtureDef()
     fixtureDef.shape = boxShape
 
@@ -388,7 +388,7 @@ def createBoxFixture(pos = (0,0), width=1.0, height=1.0, bDynamic=True, friction
     else:       fixtureDef.density = 0            
     return fixtureDef
 
-def createBox(position, w=1.0, h=1.0, wdiv=1, hdiv=1, bDynamic=True, density=1, friction=0.3, damping=0, collisionGroup=None, restitution=None, bCollideNoOne=False, name=""):
+def createBox(position, w=1.0, h=1.0, wdiv=1, hdiv=1, bDynamic=True, density=1, friction=0.3, damping=0, collisionGroup=None, restitution=None, bCollideNoOne=False, name="",angle=0):
     global world
     bodyDef = Box2D.b2BodyDef()
     bodyDef.position = position
@@ -413,7 +413,7 @@ def createBox(position, w=1.0, h=1.0, wdiv=1, hdiv=1, bDynamic=True, density=1, 
         for j in range(wdiv):
             x = 2*j*dw + (1-wdiv)*dw
             y = 2*i*dh + (1-hdiv)*dh
-            fixtureDef = createBoxFixture((x, y), width=dw, height=dh, bDynamic=bDynamic, density=density, friction=friction, collisionGroup=collisionGroup, restitution=restitution)
+            fixtureDef = createBoxFixture((x, y), width=dw, height=dh, bDynamic=bDynamic, density=density, friction=friction, collisionGroup=collisionGroup, restitution=restitution,angle=angle)
             if(bCollideNoOne):
                 fixtureDef.filter.maskBits = 0x0000
             fixture = body.CreateFixture(fixtureDef)
