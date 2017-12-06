@@ -23,8 +23,9 @@ def addWalls(pos, dx=3, dh=0, h=2.8, th=0, bHoriz=True, bVert=True, damping = 0)
         createBox((x - dx - wl, y + yh - 1 + dh / 2 + th), w=wl, h=h + dh, bDynamic=False, damping=damping, friction=0, name="wall_left")
         createBox((x + dx + wl, y + yh - 1 + dh / 2 + th), w=wl, h=h + dh, bDynamic=False, damping=damping, friction=0, name="wall_right")
 
-def addStandardWall(pos,L,W,name):
-    createBox(pos, w=W, h=L, bDynamic=False, damping=-1, name=name)
+def addStandardWall(pos,L,W,name,angle=0):
+    createBox(pos, w=W, h=L, bDynamic=False, damping=-1, name=name,angle=angle)
+
 
 def addReward(who, pos=(0,0), vel=(0,0), reward_type=0, bDynamic=True, bCollideNoOne=False):
     if(reward_type == 0):
@@ -66,6 +67,14 @@ class ExpSetupPreys(object):
         addStandardWall((L_wall,0),L_wall,W_wall,'wall_E')
         addStandardWall((0,L_wall),W_wall,L_wall,'wall_N')
         addStandardWall((0,-L_wall),W_wall,L_wall,'wall_S')
+        n_obstacles=5
+        for obs in range(n_obstacles):
+            x=random.random()*L_wall-L_wall/2.
+            y=random.random()*L_wall-L_wall/2.
+            w=random.random()*.2
+            l=random.random()*1
+            ang=random.random()*360 #*2*np.pi
+            addStandardWall((x,y),w,l,'wall_'+str(obs).zfill(2),angle=ang)
         self.objs = []
         addReward(self, pos=(0, 4 + th), vel=(0, 0), bDynamic=False, bCollideNoOne=True)
         addReward(self, pos=(0, 0 + th), vel=(0, 0), reward_type=1, bDynamic=False, bCollideNoOne=True)
