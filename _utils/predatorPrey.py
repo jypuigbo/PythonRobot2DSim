@@ -7,7 +7,7 @@ class prey(Epuck):
 		Epuck.update(self)
 		IRs=self.IR
 		IR= IRs
-		amounts = np.cos(IR.IRAngles)*(1-np.array(IR.IRValues))**2.
-		amount=np.sum(amounts)
+		amounts = np.cos(IR.IRAngles)*np.exp(1-np.array(IR.IRValues))*.1
+		amount=np.sum(amounts*(amounts>.1))
 		self.motors[0] = -amount+.5
 		self.motors[1] = amount+.5
