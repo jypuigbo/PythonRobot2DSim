@@ -66,7 +66,10 @@ class IR(object):
             self.callback.fixture = None
             world.RayCast(self.callback, c, cdist)
             if(self.callback.fixture is not None):
-                self.IRValues[k] = dist(c, self.callback.point) / self.maxdist
+                if 'ignore' in self.callback.fixture.body.userData.keys():
+                    self.IRValues[k] = 1
+                else:
+                    self.IRValues[k] = dist(c, self.callback.point) / self.maxdist
             else:
                 self.IRValues[k] = 1
 
