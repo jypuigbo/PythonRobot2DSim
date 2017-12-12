@@ -73,6 +73,37 @@ class IR(object):
             else:
                 self.IRValues[k] = 1
 
+class VisualSensor(object):
+    """Infraread sensors class implemented as RayCast used by EPuck, CartPole."""
+
+    def __init__(self, retinaSize=10,span=90,maxdist=20):
+        """Init IRAngles and IRValues and RayCast."""
+        self.retinaSize = retinaSize
+        self.maxdist = maxdist
+        self.callback = RayCastCallback()
+        if(retinaSize < 4):
+            m, da = (1 + retinaSize) % 2, 2*np.pi*span/360. / (2 + retinaSize)
+        else:
+            m, da = (1 + retinaSize) % 2, 2*np.pi*span/360. / (retinaSize - 1)
+        self.VSAngles = [k * da - ((retinaSize - m) / 2) * da - m * da / 2 for k in range(retinaSize)]
+        self.RGB = [[0,0,0] for i in range(retinaSize)]
+
+    def update(self, pos, angle, r=0.1):
+        """Udpate casting ray."""
+        for k in range(self.retinaSize):
+            v = vrotate((1, 0), angle + self.VSAngles[k])
+            c = pos + [0.9 * r * v[0], 0.9 * r * v[1]]
+            cdist = pos + [self.maxdist * v[0], self.maxdist * v[1]]
+            self.callback.fixture = None
+            world.RayCast(self.callback, c, cdist)
+            if(self.callback.fixture is not None):
+                if 'RGB' in self.callback.fixture.body.userData.keys():
+                    self.RGB[k] = self.callback.fixture.body.userData['RGB']
+                else:
+                    self.RGB[k] = [255,255,255]
+            else:
+                self.RGB[k] = [0,0,0]
+
 
 # *****************************************************************
 # Epuck class
@@ -80,11 +111,12 @@ class IR(object):
 class Epuck(object):
     """Epuck robot class: two motors and infrared sensors."""
 
-    def __init__(self, position=(0, 0), angle=np.pi / 2, r=0.48, bHorizontal=False, frontIR=6, nother=0, nrewsensors=0):
+    def __init__(self, position=(0, 0), angle=np.pi / 2, r=0.48, bHorizontal=False, frontIR=6, nother=0, nrewsensors=0,RGB=[255,0,0]):
         """Init of userData map with relevant values."""
 
         self.ini_pos = position
-        self.body = createCircle(position, r=r, bDynamic=True, restitution=0, name="epuck")
+        #self.body = createCircle(position, r=r, bDynamic=True, restitution=0, name="epuck")
+        self.body = createBox(position, w=r, h=r, wdiv=1, hdiv=1, bDynamic=True, restitution=0, name="epuck")
         self.body.angle = angle
         self.r = r
         # self.body = createBox(position, w=0.2,h=0.2,bDynamic=True)
@@ -95,9 +127,13 @@ class Epuck(object):
         self.frontIR = frontIR
         self.IR = IR(frontIR)
 
+        self.RGB=RGB
+
         self.body.userData["nIR"] = frontIR
         self.body.userData["IRAngles"] = self.IR.IRAngles
         self.body.userData["IRValues"] = self.IR.IRValues
+        self.body.userData["RGB"] = self.RGB
+        self.body.userData["radius"] = self.r
 
         self.GradSensors = []
 

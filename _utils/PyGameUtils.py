@@ -97,7 +97,14 @@ def box2d_draw_polygon(screen, polygon, body, fixture, color = [], width=3):
         else:
             a,b = vertices[3],vertices[0]
             chestpos = a+(b-a)/3.8
-        drawIR(screen,chestpos,body.angle,body.userData["nIR"],body.userData["IRAngles"],body.userData["IRValues"])    
+        drawIR(screen,chestpos,body.angle,body.userData["nIR"],body.userData["IRAngles"],body.userData["IRValues"]) 
+    elif(body.userData["name"] == "epuck"):
+        width = 4   
+        color = body.userData['RGB']
+        draw_polygon(screen, vertices, color, width)
+        r = body.userData['radius']
+        drawEpuck(screen,r,body,color,width)
+
     else:
         draw_polygon(screen, vertices, color, width)
 
@@ -172,7 +179,8 @@ def box2d_draw_circle(screen, circle, body, fixture, color=[], width=3):
             draw_circle(screen, position, radius=int(r * PPM), color=color, width=0)
             width, color = 6, [255 - 255 * e,255 * e,0]
     elif(name == "epuck"):
-        width, color = 4, [55, 100, 225]
+        color = body.userData['RGB']
+        width = 4
     if(name == "ball"):
         width, color = 6, [10, 80, 0]
         draw_circle(screen, position, radius=int(r*PPM), color=color, width=0)
@@ -185,8 +193,11 @@ def box2d_draw_circle(screen, circle, body, fixture, color=[], width=3):
             draw_circle(screen, position, radius=int(r*PPM), color=c, width=w)
         draw_circle(screen, position, radius=int(r*PPM), color=color, width=width)
 
-    if(name == "epuck"): drawEpuck(screen,r,body,color,width)
-    elif(name == "wheel"): drawWheel(screen,r,body,color,width)
+    if(name == "epuck"): 
+        color = body.userData['RGB']
+        drawEpuck(screen,r,body,color,width)
+    elif(name == "wheel"): 
+        drawWheel(screen,r,body,color,width)
 
 
 def my_draw_line(screen, points, color=(10, 80, 40, 10), width=1):
