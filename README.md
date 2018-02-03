@@ -1,4 +1,4 @@
-Author: marti.sanchez@upf.edu
+Forked from  santmarti/PythonRobot2DSim, by marti.sanchez@upf.edu
 
 2D simulations
 
