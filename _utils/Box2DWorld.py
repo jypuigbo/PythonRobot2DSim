@@ -10,12 +10,24 @@ from matplotlib import animation
 import VectorFigUtils
 from VectorFigUtils import drawBox, drawCircle, makeFigure, vnorm, vrotate, vangle, dist, vangleSign, computePointsAngle
 
+import imp
+try:
+    imp.find_module('myCollisions')
+    found = True
+except ImportError:
+    found = False
 
 # ********************************************
 # World Related Globals
 
 start_time = time.time()
 world = Box2D.b2World(gravity=[0.0, -0.001]) # normal gravity -9.8
+
+if found:
+    from myCollisions import consumeReward, TODESTROY
+    world.contactListener = consumeReward()
+else:
+    TODESTROY=[]
 
 arm = None
 nao = None
@@ -116,7 +128,12 @@ def step():
     global world, TIME_STEP, vel_iters, pos_iters, arm
     world.Step(TIME_STEP, vel_iters, pos_iters)
     world.ClearForces()
-
+def destroy():
+    global world,TODESTROY
+    if len(TODESTROY)>0:
+        for body in TODESTROY:
+            world.DestroyBody(body)
+        del TODESTROY[:]
 
 def plotWorld(ax, alpha=0.3, nao=None, obj=None, bDrawGround=False, color='b', centers=[], specials=[], cradius=0.1, ccolor='r', label='_'):
     global world
