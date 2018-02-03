@@ -1,6 +1,6 @@
 import numpy as np
 from Box2DWorld import (world, step, createBox, createBoxFixture, createCircle,
-                        myCreateRevoluteJoint, vrotate, vangle, RayCastCallback)
+                        myCreateRevoluteJoint, vrotate, vangle, RayCastCallback,Box2D)
 from Arm import Arm
 from VectorFigUtils import dist
 
@@ -8,10 +8,11 @@ from VectorFigUtils import dist
 class GradSensor(object):
     """ Gradient Sensor used by EPuck."""
 
-    def __init__(self, ngrad=1, name="grad"):
+    def __init__(self, ngrad=1, name="grad",maxdist=3.):
         """Init Gradient Sensor."""
         self.name = name
         self.ngrad = ngrad
+        self.maxd = maxdist
         if(ngrad < 4):
             m, da = (1 + ngrad) % 2, np.pi / (2 + ngrad)
         elif(ngrad == 4):
@@ -23,7 +24,6 @@ class GradSensor(object):
 
     def update(self, pos, angle, centers=[], extremes=0):
         """Update passing agnet pos, angle and list of positions of gradient emmiters."""
-        maxd = 6.5
         sensors = range(self.ngrad)
         if(extremes):
             sensors = [0, self.ngrad - 1]
@@ -36,9 +36,9 @@ class GradSensor(object):
             for i, c in enumerate(centers):
                 vc = (c[0] - pos[0], c[1] - pos[1])
                 d = dist(pos, c)
-                if(d > maxd):
-                    d = maxd
-                vals[i] = ((maxd - d) / maxd) * (1 - abs(vangle(v, vc)) / np.pi)
+                if(d > self.maxd):
+                    d = self.maxd
+                vals[i] = ((self.maxd - d) / self.maxd) * (1 - abs(vangle(v, vc)) / np.pi)
             self.GradValues[k] = 1 - max(vals)
 
 
@@ -48,7 +48,7 @@ class IR(object):
     def __init__(self, nir=1):
         """Init IRAngles and IRValues and RayCast."""
         self.nir = nir
-        self.maxdist = 3
+        self.maxdist = 1
         self.callback = RayCastCallback()
         if(nir < 4):
             m, da = (1 + nir) % 2, np.pi / (2 + nir)
@@ -111,12 +111,14 @@ class VisualSensor(object):
 class Epuck(object):
     """Epuck robot class: two motors and infrared sensors."""
 
-    def __init__(self, position=(0, 0), angle=np.pi / 2, r=0.48, bHorizontal=False, frontIR=6, nother=0, nrewsensors=0,RGB=[255,0,0]):
+    def __init__(self, position=(0, 0), angle=np.pi / 2, r=0.48, bHorizontal=False, frontIR=6, nother=0, nrewsensors=0,RGB=[255,0,0],bodyType='circle'):
         """Init of userData map with relevant values."""
 
         self.ini_pos = position
-        #self.body = createCircle(position, r=r, bDynamic=True, restitution=0, name="epuck")
-        self.body = createBox(position, w=r, h=r, wdiv=1, hdiv=1, bDynamic=True, restitution=0, name="epuck")
+        if bodyType=='circle':
+            self.body = createCircle(position, r=r, bDynamic=True, restitution=0, name="epuck")
+        elif bodyType=='square':
+            self.body = createBox(position, w=r, h=r, wdiv=1, hdiv=1, bDynamic=True, restitution=0, name="epuck")
         self.body.angle = angle
         self.r = r
         # self.body = createBox(position, w=0.2,h=0.2,bDynamic=True)
