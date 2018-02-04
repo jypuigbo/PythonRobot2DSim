@@ -128,12 +128,24 @@ def step():
     global world, TIME_STEP, vel_iters, pos_iters, arm
     world.Step(TIME_STEP, vel_iters, pos_iters)
     world.ClearForces()
-def destroy():
+def destroy(dyingLists=[]):
     global world,TODESTROY
     if len(TODESTROY)>0:
         for body in TODESTROY:
             world.DestroyBody(body)
+
         del TODESTROY[:]
+        for b in world.bodies:
+            pass# This is a hack. If I don't iterate on this list, pyGame segFaults. Any suggestion is welcome
+        for l in dyingLists:
+            ids=[]
+            for i,o in enumerate(l):
+                if 'this' in o.userData.keys(): # Empties the list based on object being a swig object and not a body. This wil crash if we move to a full python implementation
+                    ids.append(i)
+
+            for i in ids:
+                del l[i]
+
 
 def plotWorld(ax, alpha=0.3, nao=None, obj=None, bDrawGround=False, color='b', centers=[], specials=[], cradius=0.1, ccolor='r', label='_'):
     global world
@@ -169,7 +181,6 @@ def plotWorld(ax, alpha=0.3, nao=None, obj=None, bDrawGround=False, color='b', c
                     drawBox2D(ax, body, fixture, color=color, alpha=0.25, fill=False, linestyle='dashed')
                 if(isinstance(shape, Box2D.b2CircleShape)):
                     drawCircle(ax, body.position, 0.3, fill=False, linestyle='dashed')
-
     if(len(centers) > 0):
         plotVectors(ax, centers, cradius=cradius, specials=specials, ccolor=ccolor, label=label)
     plt.grid()
