@@ -172,12 +172,13 @@ def box2d_draw_circle(screen, circle, body, fixture, color=[], width=3):
 
     if(name.startswith("reward")):
         if(bDraw):
-            e = userData["energy"]
-            width, color = 6, [80 - 80 * e, 80 * e, 0]
-            if(name == "reward_small"):
-                color = [10, 100, 255]
+            #e = userData["energy"]
+            color=userData['RGB']
+            #width, color = 6, [80 - 80 * e, 80 * e, 0]
+            #if(name == "reward_small"):
+            #    color = [10, 100, 255]
             draw_circle(screen, position, radius=int(r * PPM), color=color, width=0)
-            width, color = 6, [255 - 255 * e,255 * e,0]
+            #width, color = 6, [255 - 255 * e,255 * e,0]
     elif(name == "epuck"):
         color = body.userData['RGB']
         width = 4
