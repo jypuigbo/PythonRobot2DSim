@@ -99,11 +99,13 @@ def box2d_draw_polygon(screen, polygon, body, fixture, color = [], width=3):
             chestpos = a+(b-a)/3.8
         drawIR(screen,chestpos,body.angle,body.userData["nIR"],body.userData["IRAngles"],body.userData["IRValues"]) 
     elif(body.userData["name"] == "epuck"):
-        width = 4   
-        color = body.userData['RGB']
-        draw_polygon(screen, vertices, color, width)
-        r = body.userData['radius']
-        drawEpuck(screen,r,body,color,width)
+        bDraw = body.userData["visible"]
+        if(bDraw):
+            width = 4   
+            color = body.userData['RGB']
+            draw_polygon(screen, vertices, color, width)
+            r = body.userData['radius']
+            drawEpuck(screen,r,body,color,width)
 
     else:
         draw_polygon(screen, vertices, color, width)
@@ -195,8 +197,9 @@ def box2d_draw_circle(screen, circle, body, fixture, color=[], width=3):
         draw_circle(screen, position, radius=int(r*PPM), color=color, width=width)
 
     if(name == "epuck"): 
-        color = body.userData['RGB']
-        drawEpuck(screen,r,body,color,width)
+        if bDraw:
+            color = body.userData['RGB']
+            drawEpuck(screen,r,body,color,width)
     elif(name == "wheel"): 
         drawWheel(screen,r,body,color,width)
 

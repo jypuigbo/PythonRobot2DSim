@@ -98,7 +98,7 @@ class VisualSensor(object):
             world.RayCast(self.callback, c, cdist)
             if(self.callback.fixture is not None):
                 if 'RGB' in self.callback.fixture.body.userData.keys():
-                    self.RGB[k] = self.callback.fixture.body.userData['RGB']
+                    self.RGB[k] = [int(col-100*dist(c, self.callback.point) / self.maxdist) for col in self.callback.fixture.body.userData['RGB']]
                 else:
                     self.RGB[k] = [255,255,255]
             else:
