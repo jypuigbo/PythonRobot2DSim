@@ -133,38 +133,21 @@ def destroy(dyingLists=[]):
     global world,TODESTROY
     flag=False
     while len(TODESTROY)>0:
-        for i in range(5):
-            world.ClearForces()
-            if len(TODESTROY)>1:
-                print 'Found ',len(TODESTROY),' bodies to destroy'
-            
-            '''for body in TODESTROY:
-                                                    print body.userData['name']
-                                                    world.DestroyBody(body)
-                                                #world.DestroyBody(TODESTROY[0])
-                                                #print time.sleep(5.)
-                                                #print len(world.bodies)
-                                                del TODESTROY[:]
-                                                print 'going through the net'
-                                                for b in world.bodies:
-                                                    time.sleep(.001)
-                                                    pass# This is a hack. If I don't iterate on this list, pyGame segFaults. Any suggestion is welcome
-                                                print 'emptying lists' '''
-            for l in dyingLists:
-                ids=[]
-                for i,o in enumerate(l):
-                    if '_destroy' in o.userData['name']:
-                    #if 'this' in o.userData.keys(): # Empties the list based on object being a swig object and not a body. This wil crash if we move to a full python implementation
-                        if 'body' in o.__dict__.keys():
-                            o=o.body
-                        ids.append(i)
-                        world.DestroyBody(o)
-                for i,idx in enumerate(ids):
-                    del l[idx-i]
-                for b in world.bodies:
-                    time.sleep(.001)
-                    pass
-            del TODESTROY[:]
+        if len(TODESTROY)>1:
+            print 'Found ',len(TODESTROY),' bodies to destroy'
+        
+        for l in dyingLists:
+            ids=[]
+            for i,o in enumerate(l):
+                if '_destroy' in o.userData['name']:
+                #if 'this' in o.userData.keys(): # Empties the list based on object being a swig object and not a body. This wil crash if we move to a full python implementation
+                    if 'body' in o.__dict__.keys():
+                        o=o.body
+                    ids.append(i)
+                    world.DestroyBody(o)
+            for i,idx in enumerate(ids):
+                del l[idx-i]
+        del TODESTROY[:]
         flag=True
         print 'destruction "finished"!'
         #
