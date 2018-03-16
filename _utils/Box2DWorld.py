@@ -24,8 +24,9 @@ start_time = time.time()
 world = Box2D.b2World(gravity=[0.0, -0.001]) # normal gravity -9.8
 
 if found:
-    from myCollisions import consumeReward, TODESTROY
-    world.contactListener = consumeReward()
+    from myCollisions import consumeReward, TODESTROY, collisionDestruction
+    #world.contactListener = consumeReward()
+    world.contactListener = collisionDestruction()
 else:
     TODESTROY=[]
 
