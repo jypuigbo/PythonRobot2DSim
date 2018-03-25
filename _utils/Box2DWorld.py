@@ -358,7 +358,7 @@ def createGround(position=[0,-20]):
     return groundBody
 
 
-def createCircle(position, r=0.3, bDynamic=True, bCollideNoOne=False, density=1, damping=0.05, restitution=0.1, friction=200, name=""):
+def createCircle(position, r=0.3, bDynamic=True, bCollideNoOne=False, density=1, damping=0.05, restitution=0.1, friction=200, name="",categoryBits=0x0001):
     global world, fig, ax
     bodyDef = Box2D.b2BodyDef()
     bodyDef.position = position
@@ -380,8 +380,7 @@ def createCircle(position, r=0.3, bDynamic=True, bCollideNoOne=False, density=1,
     mask = 0x0009
     if(bCollideNoOne):
         mask = 0x0000
-
-    fixture = body.CreateFixture(maskBits=mask, shape=shape, density=density, restitution=restitution, friction=friction)
+    fixture = body.CreateFixture(maskBits=mask, shape=shape, density=density, restitution=restitution, friction=friction,categoryBits=categoryBits)
     body.userData = {"name": name}
 
     return body
@@ -426,7 +425,7 @@ def createBoxFixture(pos = (0,0), width=1.0, height=1.0, bDynamic=True, friction
     else:       fixtureDef.density = 0            
     return fixtureDef
 
-def createBox(position, w=1.0, h=1.0, wdiv=1, hdiv=1, bDynamic=True, density=1, friction=0.3, damping=0, collisionGroup=None, restitution=None, bCollideNoOne=False, name="",angle=0):
+def createBox(position, w=1.0, h=1.0, wdiv=1, hdiv=1, bDynamic=True, density=1, friction=0.3, damping=0, collisionGroup=None, restitution=None, bCollideNoOne=False, name="",angle=0,categoryBits=0x0001):
     global world
     bodyDef = Box2D.b2BodyDef()
     bodyDef.position = position
@@ -454,7 +453,7 @@ def createBox(position, w=1.0, h=1.0, wdiv=1, hdiv=1, bDynamic=True, density=1, 
             fixtureDef = createBoxFixture((x, y), width=dw, height=dh, bDynamic=bDynamic, density=density, friction=friction, collisionGroup=collisionGroup, restitution=restitution,angle=angle)
             if(bCollideNoOne):
                 fixtureDef.filter.maskBits = 0x0000
-            fixture = body.CreateFixture(fixtureDef)
+            fixture = body.CreateFixture(fixtureDef,categoryBits=categoryBits)
 
     return body
 
