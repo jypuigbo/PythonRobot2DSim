@@ -111,14 +111,14 @@ class VisualSensor(object):
 class Epuck(object):
     """Epuck robot class: two motors and infrared sensors."""
 
-    def __init__(self, position=(0, 0), angle=np.pi / 2, r=0.48, bHorizontal=False, frontIR=6, nother=0, nrewsensors=0,RGB=[255,0,0],bodyType='circle',categoryBits=0x0001):
+    def __init__(self, position=(0, 0), angle=np.pi / 2, r=0.48, bHorizontal=False, frontIR=6, nother=0, nrewsensors=0,RGB=[255,0,0],bodyType='circle',categoryBits=0x0001,name='epuck'):
         """Init of userData map with relevant values."""
 
         self.ini_pos = position
         if bodyType=='circle':
-            self.body = createCircle(position, r=r, bDynamic=True, restitution=0, name="epuck",categoryBits=categoryBits)
+            self.body = createCircle(position, r=r, bDynamic=True, restitution=0, name=name,categoryBits=categoryBits)
         elif bodyType=='square':
-            self.body = createBox(position, w=r, h=r, wdiv=1, hdiv=1, bDynamic=True, restitution=0, name="epuck",categoryBits=categoryBits)
+            self.body = createBox(position, w=r, h=r, wdiv=1, hdiv=1, bDynamic=True, restitution=0, name=name,categoryBits=categoryBits)
         self.body.angle = angle
         self.r = r
         # self.body = createBox(position, w=0.2,h=0.2,bDynamic=True)

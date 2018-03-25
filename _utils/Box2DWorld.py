@@ -178,7 +178,7 @@ def plotWorld(ax, alpha=0.3, nao=None, obj=None, bDrawGround=False, color='b', c
                         else:
                             drawBox2D(ax, body, fixture, color=color, alpha=alpha)
                 if(isinstance(shape, Box2D.b2CircleShape)):
-                    if(name == "epuck"):
+                    if("epuck" in name):
                         drawEpuck(ax, shape, body)
                     elif(name == "reward"):
                         drawCircle(ax, body.position, shape.radius, color=[0.5, 0.7, 0.3])

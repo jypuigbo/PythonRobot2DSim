@@ -98,7 +98,7 @@ def box2d_draw_polygon(screen, polygon, body, fixture, color = [], width=3):
             a,b = vertices[3],vertices[0]
             chestpos = a+(b-a)/3.8
         drawIR(screen,chestpos,body.angle,body.userData["nIR"],body.userData["IRAngles"],body.userData["IRValues"]) 
-    elif(body.userData["name"] == "epuck"):
+    elif('epuck' in body.userData["name"]):
         bDraw = body.userData["visible"]
         if(bDraw):
             width = 4   
@@ -181,7 +181,7 @@ def box2d_draw_circle(screen, circle, body, fixture, color=[], width=3):
             #    color = [10, 100, 255]
             draw_circle(screen, position, radius=int(r * PPM), color=color, width=0)
             #width, color = 6, [255 - 255 * e,255 * e,0]
-    elif(name == "epuck"):
+    elif('epuck' in name):
         color = body.userData['RGB']
         width = 4
     if(name == "ball"):
@@ -196,7 +196,7 @@ def box2d_draw_circle(screen, circle, body, fixture, color=[], width=3):
             draw_circle(screen, position, radius=int(r*PPM), color=c, width=w)
         draw_circle(screen, position, radius=int(r*PPM), color=color, width=width)
 
-    if(name == "epuck"): 
+    if('epuck' in name): 
         if bDraw:
             color = body.userData['RGB']
             drawEpuck(screen,r,body,color,width)
