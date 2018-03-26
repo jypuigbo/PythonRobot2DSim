@@ -8,6 +8,9 @@ Python libraries that need to be installed:
 
 Only pybox2d is needed to run the notebooks.
 
+Pygame can be installed using conda:
+https://anaconda.org/cogsci/pygame
+
 Best manual for pybox2d can be found at:
 https://code.google.com/archive/p/pybox2d/wikis/GettingStartedManual.wiki
 Best 
