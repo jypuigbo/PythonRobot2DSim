@@ -358,7 +358,7 @@ def createGround(position=[0,-20]):
     return groundBody
 
 
-def createCircle(position, r=0.3, bDynamic=True, bCollideNoOne=False, density=1, damping=0.05, restitution=0.1, friction=200, name="",categoryBits=0x0001):
+def createCircle(position, r=0.3, bDynamic=True, bCollideNoOne=False, density=1, damping=0.05, restitution=0.1, friction=200, name="",categoryBits=0x0001,maskBits=0x0009):
     global world, fig, ax
     bodyDef = Box2D.b2BodyDef()
     bodyDef.position = position
@@ -377,7 +377,7 @@ def createCircle(position, r=0.3, bDynamic=True, bCollideNoOne=False, density=1,
     body = world.CreateBody(bodyDef)
     shape = Box2D.b2CircleShape(radius=r)
 
-    mask = 0x0009
+    mask=maskBits
     if(bCollideNoOne):
         mask = 0x0000
     fixture = body.CreateFixture(maskBits=mask, shape=shape, density=density, restitution=restitution, friction=friction,categoryBits=categoryBits)

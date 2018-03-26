@@ -116,9 +116,9 @@ class Epuck(object):
 
         self.ini_pos = position
         if bodyType=='circle':
-            self.body = createCircle(position, r=r, bDynamic=True, restitution=0, name=name,categoryBits=categoryBits)
+            self.body = createCircle(position, r=r, bDynamic=True, restitution=0, name=name, categoryBits=categoryBits, maskBits=0x0009)
         elif bodyType=='square':
-            self.body = createBox(position, w=r, h=r, wdiv=1, hdiv=1, bDynamic=True, restitution=0, name=name,categoryBits=categoryBits)
+            self.body = createBox(position, w=r, h=r, wdiv=1, hdiv=1, bDynamic=True, restitution=0, name=name,categoryBits=categoryBits, maskBits=0x0009)
         self.body.angle = angle
         self.r = r
         # self.body = createBox(position, w=0.2,h=0.2,bDynamic=True)
