@@ -425,7 +425,9 @@ def createBoxFixture(pos = (0,0), width=1.0, height=1.0, bDynamic=True, friction
     else:       fixtureDef.density = 0            
     return fixtureDef
 
-def createBox(position, w=1.0, h=1.0, wdiv=1, hdiv=1, bDynamic=True, density=1, friction=0.3, damping=0, collisionGroup=None, restitution=None, bCollideNoOne=False, name="",angle=0,categoryBits=0x0001):
+def createBox(position, w=1.0, h=1.0, wdiv=1, hdiv=1, bDynamic=True, density=1, friction=0.3, damping=0,
+              collisionGroup=None, restitution=None, bCollideNoOne=False, name="",angle=0,categoryBits=0x0001,
+              maskBits=0x0009):
     global world
     bodyDef = Box2D.b2BodyDef()
     bodyDef.position = position
@@ -450,10 +452,12 @@ def createBox(position, w=1.0, h=1.0, wdiv=1, hdiv=1, bDynamic=True, density=1, 
         for j in range(wdiv):
             x = 2*j*dw + (1-wdiv)*dw
             y = 2*i*dh + (1-hdiv)*dh
-            fixtureDef = createBoxFixture((x, y), width=dw, height=dh, bDynamic=bDynamic, density=density, friction=friction, collisionGroup=collisionGroup, restitution=restitution,angle=angle)
+            fixtureDef = createBoxFixture((x, y), width=dw, height=dh, bDynamic=bDynamic, density=density,
+                                          friction=friction, collisionGroup=collisionGroup, restitution=restitution,
+                                          angle=angle)
             if(bCollideNoOne):
                 fixtureDef.filter.maskBits = 0x0000
-            fixture = body.CreateFixture(fixtureDef,categoryBits=categoryBits)
+            fixture = body.CreateFixture(fixtureDef,categoryBits=categoryBits,maskBits=maskBits)
 
     return body
 
