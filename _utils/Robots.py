@@ -45,7 +45,7 @@ class GradSensor(object):
 class IR(object):
     """Infraread sensors class implemented as RayCast used by EPuck, CartPole."""
 
-    def __init__(self, nir=1):
+    def __init__(self, nir=1,ignoreList=[]):
         """Init IRAngles and IRValues and RayCast."""
         self.nir = nir
         self.maxdist = 1
@@ -56,6 +56,7 @@ class IR(object):
             m, da = (1 + nir) % 2, np.pi / (nir - 1)
         self.IRAngles = [k * da - ((nir - m) / 2) * da - m * da / 2 for k in range(nir)]
         self.IRValues = [1 for i in range(nir)]
+        self.ignoreList=ignoreList
 
     def update(self, pos, angle, r=0.1):
         """Udpate casting ray."""
@@ -67,6 +68,8 @@ class IR(object):
             world.RayCast(self.callback, c, cdist)
             if(self.callback.fixture is not None):
                 if 'ignore' in self.callback.fixture.body.userData.keys():
+                    self.IRValues[k] = 1
+                elif any([ig in self.callback.fixture.body.userData['name'] for ig in self.ignoreList]):
                     self.IRValues[k] = 1
                 else:
                     self.IRValues[k] = dist(c, self.callback.point) / self.maxdist
@@ -122,7 +125,7 @@ class Epuck(object):
             self.body = createBox(position, w=r, h=r, wdiv=1, hdiv=1, bDynamic=True, restitution=0, name=name,categoryBits=categoryBits, maskBits=maskBits)
         self.body.angle = angle
         self.r = r
-        # self.body = createBox(position, w=0.2,h=0.2,bDynamic=True)
+
         self.motors = [0, 0]
         self.bHorizontal = bHorizontal
         self.bForceMotors = True
