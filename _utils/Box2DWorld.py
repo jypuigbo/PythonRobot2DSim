@@ -140,14 +140,19 @@ def destroy(dyingLists=[]):
         for l in dyingLists:
             ids=[]
             for i,o in enumerate(l):
-                if '_destroy' in o.userData['name']:
-                #if 'this' in o.userData.keys(): # Empties the list based on object being a swig object and not a body. This wil crash if we move to a full python implementation
-                    if 'body' in o.__dict__.keys():
-                        o=o.body
-                    ids.append(i)
-                    world.DestroyBody(o)
+                if 'body' in o.__dict__.keys():
+                    o2=o
+                    o = o.body
+                    if '_destroy' in o.userData['name'] or '_destroy' in o2.userData['name']:
+                        ids.append(i)
+                        world.DestroyBody(o)
+                else:
+                    if '_destroy' in o.userData['name']:
+                        ids.append(i)
+                        world.DestroyBody(o)
             for i,idx in enumerate(ids):
                 del l[idx-i]
+
         del TODESTROY[:]
         flag=True
         print 'destruction "finished"!'
