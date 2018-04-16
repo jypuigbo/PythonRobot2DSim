@@ -173,6 +173,10 @@ class Epuck(object):
         """Return position."""
         return self.body.angle
 
+    def setAngle(self, a):
+        """Set angle."""
+        self.body.angle = a
+
     def getVelocity(self):
         """Return linear velocity."""
         return self.body.linearVelocity
